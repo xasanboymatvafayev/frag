@@ -51,9 +51,15 @@ $step = file_get_contents("step/$cid.txt");
 $balance = file_get_contents("users/$cid/balance.txt");
 $kiritgan = file_get_contents("users/$cid/kiritgan.txt");
 
-mkdir("step");
-mkdir("users");
-mkdir("users/$cid");
+if(!file_exists("step")){
+    mkdir("step", 0777, true);
+}
+if(!file_exists("users")){
+    mkdir("users", 0777, true);
+}
+if(!file_exists("users/$cid")){
+    mkdir("users/$cid", 0777, true);
+}
 
 if(isset($message)){
 	if($balance == null or $kiritgan == null){
@@ -73,7 +79,7 @@ if($text == "/start" or $text == "⏮️ Orqaga"){
 	bot('sendMessage',[
 	'chat_id'=>$cid,
 	'text'=>"<b>🛒 Ushbu bot yordamida telegram starslarni avtomatik tarzda sotib olishingiz mumkin ✅</b>",
-	'parse_mode'=>html,
+	'parse_mode'=>'html',
 	'reply_markup'=>json_encode([
 	'resize_keyboard'=>true,
 	'keyboard'=>[
@@ -92,7 +98,7 @@ if($text == "🌟 Stars olish"){
 	'chat_id'=>$cid,
 	'text'=>"<b>📑 Sotib olmoqchi bo'lgan stars miqdorini yuboring:</b>
 <i>⚠️ Minimal: 50</i>",
-	'parse_mode'=>html,
+	'parse_mode'=>'html',
 	'reply_markup'=>$back
 	]);
 	file_put_contents("step/$cid.txt","miqor");
@@ -107,7 +113,7 @@ if($text >= 50){
 🔗 Usernameni yuboring yoki o'zingizga olmoqchi bo'lsangiz o'zingizni userigizni yuboring ✅</b>
 
 <blockquote>📋 Na'muna: @Org_Coder</blockquote>",
-	'parse_mode'=>html,
+	'parse_mode'=>'html',
 	'reply_markup'=>$back
 	]);
 	file_put_contents("step/$cid.txt","username-$text");
@@ -116,14 +122,14 @@ if($text >= 50){
 		bot('sendMessage',[
 		'chat_id'=>$cid,
 		'text'=>"<b>‼️ Minimal 50 ta stars!</b>",
-		'parse_mode'=>html,
+		'parse_mode'=>'html',
 		]);
 		}
 	} else {
 		bot('sendMessage',[
 		'chat_id'=>$cid,
 		'text'=>"<b>🔢 Faqat raqamlardan foydalaning!</b>",
-		'parse_mode'=>html,
+		'parse_mode'=>'html',
 		]);
 		}
 	}
@@ -153,7 +159,7 @@ if(mb_stripos($text, "@") !== false){
 <b>💰 Hisoblangan narx:</b> <u>$aniq so'm</u></blockquote>
 
 <b>❗️ Agar stars narxi sizga ma'qul kelgan bo'lsa pastdagi «</b>🛒 Sotib olish<b>» tugmasini usiga bosing ✅</b>",
-	'parse_mode'=>html,
+	'parse_mode'=>'html',
 	'reply_markup'=>json_encode([
 	'inline_keyboard'=>[
 	[['text'=>"🛒 Sotib olish",'callback_data'=>"stb-$stars-$text-$aniq"]],
@@ -166,7 +172,7 @@ if(mb_stripos($text, "@") !== false){
 		'chat_id'=>$cid,
 		'text'=>"<b>⚠️ Usernameni na'munadagidek qilib yuboring!</b>
 <blockquote>📋 Na'muna: @Org_Coder</blockquote>",
-		'parse_mode'=>html,
+		'parse_mode'=>'html',
 		]);
 		}
 	}
@@ -193,7 +199,7 @@ if($status == true){
 	bot('sendMessage',[
 	'chat_id'=>$cid2,
 	'text'=>"✅ <b>$mess</b>",
-	'parse_mode'=>html,
+	'parse_mode'=>'html',
 	]);
 	} else {
 		bot('deleteMessage',[
@@ -203,7 +209,7 @@ if($status == true){
 		bot('sendMessage',[
 		'chat_id'=>$cid2,
 		'text'=>"<b>‼️ Xatolik yuz berdi!</b>",
-		'parse_mode'=>html,
+		'parse_mode'=>'html',
 		]);
 		}
 	} else {
@@ -215,7 +221,7 @@ if($status == true){
 		'chat_id'=>$cid2,
 		'text'=>"<b>⛔️ Hisobingizda yetarli mablag' mavjud emas!</b>
 <i>💰 Sizga yana $yetma so'm yetishmayapti</i>",
-		'parse_mode'=>html,
+		'parse_mode'=>'html',
 		'reply_markup'=>$back
 		]);
 		}
@@ -236,7 +242,7 @@ if($text == "💵 Hisobim"){
 	'text'=>"<b>🆔 ID raqamingiz:</b> <code>$cid</code>
 <b>💰 Hisobingiz:</b> $balance so'm
 <b>💳 Pul kiritganlaringiz:</b> $kiritgan so'm",
-	'parse_mode'=>html,
+	'parse_mode'=>'html',
 	]);
 	}
 	
@@ -244,7 +250,7 @@ if($text == "📥 Hisobni to'ldirish"){
 	bot('sendMessage',[
 	'chat_id'=>$cid,
 	'text'=>"<b>💳 Quyidagi to'lov tizimlaridan birini tanlang:</b>",
-	'parse_mode'=>html,
+	'parse_mode'=>'html',
 	'reply_markup'=>$tizimlar
 	]);
 	}
@@ -263,7 +269,7 @@ if(mb_stripos($data, "tizim—") !== false){
 <b>💳 Karta raqami:</b> <code>$karta</code>
 
 <blockquote><i>⏳ Ushbu kartani nusxalab bank ilovalariga kirib o'zingizga kerakli summani tashlab pastdagi</i> «<b>✅ Tashladim</b>» <i>tugmasini ustiga bosing 👇</i></blockquote>",
-	'parse_mode'=>html,
+	'parse_mode'=>'html',
 	'reply_markup'=>json_encode([
 	'inline_keyboard'=>[
 	[['text'=>"✅ Tashladim",'callback_data'=>"tash-$tizim"]],
@@ -281,7 +287,7 @@ if(mb_stripos($data, "tash-") !== false){
 	bot('sendMessage',[
 	'chat_id'=>$cid2,
 	'text'=>"<b>⁉️ Kartaga qancha summa tashlaganingizni yuboring:</b>",
-	'parse_mode'=>html,
+	'parse_mode'=>'html',
 	'reply_markup'=>$back
 	]);
 	file_put_contents("step/$cid2.txt","summa-$tizim");
@@ -295,7 +301,7 @@ if($text >= 1000){
 	bot('sendMessage',[
 	'chat_id'=>$cid,
 	'text'=>"<b>🖼 Endi shu kartaga pul tashlaganingiz haqidagi chek rasmini yuboring:</b>",
-	'parse_mode'=>html,
+	'parse_mode'=>'html',
 	'reply_markup'=>$back
 	]);
 	file_put_contents("step/$cid.txt","chek-$tizim-$text");
@@ -304,7 +310,7 @@ if($text >= 1000){
 		bot('sendMessage',[
 		'chat_id'=>$cid,
 		'text'=>"<b>‼️ Minimal pul kiritish miqdori: 1000 so'm</b>",
-		'parse_mode'=>html,
+		'parse_mode'=>'html',
 		'reply_markup'=>$back
 		]);
 		}
@@ -312,7 +318,7 @@ if($text >= 1000){
 			bot('sendMessage',[
 		'chat_id'=>$cid,
 		'text'=>"<b>⚠️ Faqat raqamlardan foydalaning!</b>",
-		'parse_mode'=>html,
+		'parse_mode'=>'html',
 		'reply_markup'=>$back
 		]);
 		}
@@ -336,7 +342,7 @@ if(isset($photo)){
     bot('sendMessage',[
     'chat_id'=>$cid,
     'text'=>"<b>✅ So'rovingiz administratorlarga yuborildi!</b>",
-    'parse_mode'=>html,
+    'parse_mode'=>'html',
     ]);
     bot('sendPhoto',[
     'chat_id'=>$admin,
@@ -347,7 +353,7 @@ if(isset($photo)){
 <b>💸 To'ldirmoqchi bo'lgan summa:</b> $summa so'm
 <b>🆔 Foydalanuvchi ID raqami:</b> $cid
 <b>💰 Hisobi:</b> $balance so'm</blockquote>", // togri yopilgan
-    'parse_mode'=>html,
+    'parse_mode'=>'html',
     'reply_markup'=>json_encode([
     'inline_keyboard'=>[
     [['text'=>"✅ Tastiqlash",'callback_data'=>"tas-$cid-$summa"]],
@@ -360,7 +366,7 @@ if(isset($photo)){
     	bot('sendMessage',[
     'chat_id'=>$cid,
     'text'=>"<b>‼️ Faqat rasm ko'rinishida qabul qilinadi!</b>",
-    'parse_mode'=>html,
+    'parse_mode'=>'html',
     ]);
     }
 	}
@@ -382,12 +388,12 @@ if(mb_stripos($data, "tas-") !== false){
 	bot('sendMessage',[
 	'chat_id'=>$cid2,
 	'text'=>"<b>✅ Tastiqlandi!</b>",
-	'parse_mode'=>html,
+	'parse_mode'=>'html',
 	]);
 	bot('sendMessage',[
 	'chat_id'=>$user_id,
 	'text'=>"<b>➕ Hisobingizga +$summa so'm qo'shildi!</b>",
-	'parse_mode'=>html,
+	'parse_mode'=>'html',
 	]);
 	}
 	
@@ -402,12 +408,12 @@ if(mb_stripos($data, "bekor-") !== false){
 	bot('sendMessage',[
 	'chat_id'=>$cid2,
 	'text'=>"<b>❌ Tastiqlanmadi!</b>",
-	'parse_mode'=>html,
+	'parse_mode'=>'html',
 	]);
 	bot('sendMessage',[
 	'chat_id'=>$user_id,
 	'text'=>"<b>🚫 So'rovingiz tastiqlanmadi, sababi soxta chek tashlagansiz!</b>",
-	'parse_mode'=>html,
+	'parse_mode'=>'html',
 	]);
 	}
 	
